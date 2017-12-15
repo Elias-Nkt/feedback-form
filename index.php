@@ -35,6 +35,14 @@
             $error_message = "Введите сообщение";
             $error = true;
         }
+        if(!$error)
+        {
+            $subject = "=?utf-8?B?".base64_encode($subject."?=");
+            $headers = "From: $from\r\nReply-to: $from\r\nContent-type: text/plain; charset=utf-8\r\n";
+            mail($to, $subject, $message, $headers);
+            header("Location: success.php?send=1");
+            exit;
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -59,7 +67,7 @@
         <span style="color:red"><?=$error_subject?></span>
         <br>
         <label>Сообщение:</label><br>
-        <textarea name="message" cols="30" rows="10"><?=$_SESSION["message"]?></textarea><br>
+        <textarea name="message" cols="30" rows="10"><?=$_SESSION["message"]?></textarea>
         <span style="color:red"><?=$error_message?></span>
         <br>
         <input type="submit" name="send" value="Отправить" >
